@@ -1,3 +1,40 @@
+<?php
+ $insert=false;
+  if(isset($_POST['first_name'])){
+        
+         $server="localhost";
+         $username="root";
+         $password="";
+
+     
+          //database connection
+          $con=mysqli_connect($server,$username,$password,"server");
+          if(!$con){
+             die("Connection to this database failed due to:".mysqli_connect_error()); 
+          }
+          //echo "Success connection";  
+          $first_name=$_POST['first_name'];
+          $last_name=$_POST['last_name'];
+          $Delivery_Address=$_POST['Delivery_Address'];
+          $email=$_POST['email'];
+          $area_code=$_POST['area_code'];
+          $phone=$_POST['phone'];
+          $subject=$_POST['subject'];
+          
+          $sql= "INSERT INTO `registration` (`first_name`, `last_name`, `Delivery Address`, `email`, `area_code`, `phone`, `subject`,`dt`)
+          VALUES ('$first_name', '$last_name', '$Delivery_Address', '$email', '$area_code', '$phone', '$subject',current_timestamp());";//echo $sql;
+
+          //database connection
+          if($con->query($sql)==true){
+              //echo "Succesfully insert";
+              $insert=true; 
+          }
+          else{
+              echo "ERROR:$sql <br> $con->error";
+          }
+          $con->close();
+        }
+?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -7,7 +44,8 @@
 
   <style type="text/css">
     * {
-      margin: 0 padding:0
+      margin: 0px;
+       padding:0px;
     }
 
     body {
@@ -88,7 +126,7 @@
     .lastlabel {
       position: relative;
       color: #E5E5E5;
-      text-tranform: capitalize;
+      text-transform: capitalize;
       font-size: 16px;
       left: -45px;
       top: -10px
@@ -226,9 +264,14 @@ button:hover {
 <body>
   <div id="regform">
     <h1> From Our Oven To Your Door</h1>
+    <?php
+        if($insert==true){
+            echo "<h3>Thanks for Ordering,We get your order of <bold>$subject</bold>.
+            <br>It will be deliever from our oven to your door soon </h3>" ;}
+         ?>
   </div>
-  <<div class="main">
-    <form>
+  <div class="main">
+    <form action="http://localhost/CODE/index.php" method="post">
       <div id="name">
         <h2 class="name">Name</h2>
         <input class="firstname" type="text" name="first_name">
@@ -253,7 +296,7 @@ button:hover {
         <option>BAKED CHEESE CAKE</option>
         <option>BLACK FOREST CAKE</option>
         <option>CARAMEL CUSTARD</option>
-        <option>CHOCLATE TRUFFLE CAKE</option>
+        <option>CHOCOLATE TRUFFLE CAKE</option>
         <option>DOGHNUTS</option>
         <option>FRUIT TARTS</option>
         <option>MUD PIE</option>
